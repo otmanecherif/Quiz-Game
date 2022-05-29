@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quizApp</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://kit.fontawesome.com/d50295ad69.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="rule_box">
+        <div class="rule_title">Here are the rules</div>
+        <div class="rules_list">
+            <div class="rule">1. You will have <span>15 seconds</span> per each question.</div>
+            <div class="rule">2. Once you select your answer, you can not change it.</div>
+            <div class="rule">3. You can not select any option once time goes off.</div>
+            <div class="rule">4. You can not exit the game while you're playing.</div>
+            <div class="rule">5. The number of points depends on how many questions you answer correctly.</div>
+        </div>
+    
+        <div class="buttons">
+            <a href="../home.html"><button class="quit">Exit Quiz</button></a>
+            <button class="continue">Continue</button>
+
+        </div>
+    </div>
+
+
+
+    <div class="quiz_box">
+        <header>
+            <div class="title">quizApp</div>
+            <div class="timer">
+                <div class="time_text">Time Left</div>
+                <div class="time_sec">15</div>
+            </div>
+        </header>
+
+        <section>
+            <div class="question_text">
+                <!-- <span>As of April 2022, which male tennis player has won the most Grand Slam titles?</span>  -->
+            </div>
+            <div class="options_list">
+                <!-- <div class="option">
+                    <span>Novak Djokovic</span> 
+                    <div class="icon cross"><i class="fas fa-times"></i></div>
+                </div>
+                <div class="option">
+                    <span>Rafael Nadal</span> 
+                    <div class="icon tick"><i class="fas fa-check"></i></div>
+                </div>
+                <div class="option">
+                    <span>Roger Federer</span> 
+                </div>
+                <div class="option">
+                    <span>Pete Sampras</span> 
+                </div> -->
+                
+            </div>
+        </section>
+
+        <footer>
+            <div class="total_questions">
+                <!-- <span>Question <p>1</p> of <p>5</p></span> -->
+            </div>
+            <button class="next_question">Next</button>
+        </footer>
+
+
+    </div>
+
+
+    <div class="result_box">
+        <div class="icon">
+            <i class="fas fa-crown"></i>
+        </div>
+        <div class="steady_score_text">You have completed the Quiz!</div>
+        <div class="score_text">
+            <span>You got <p>2</p> out of <p>5</p></span> 
+         </div>
+        <div class="buttons">
+            <a href="../domains/domains.html"><button class="replay">Replay</button></a>
+            <a href="../home.html"><button class="quit">Quit</button></a>
+        </div>
+    </div>
+
+
+
+    <script src="../js/geography_questions.js"></script>
+    <script src="../js/script.js"></script>
+    
+</body>
+</html>
