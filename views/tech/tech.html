@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quizApp</title>
+    <script src="https://kit.fontawesome.com/d50295ad69.js" crossorigin="anonymous"></script>
+
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body{
+            background: #00ccff;
+        }
+
+        .start_btn,
+        .rule_box,
+        .quiz_box,
+        .result_box{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .rule_box.activeRule,
+        .quiz_box.activeQuiz,
+        .result_box.activeResult{
+            z-index: 5;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .start_btn button{
+            font-size: 25px;
+            font-weight: 500;
+            color: #017d9c;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        /* Rules */
+
+        .rule_box{
+            width: 540px;
+            background: #fff;
+            border-radius: 5px;
+        }
+
+        .rule_box .rule_title{
+        height: 60px;
+        width: 100%;
+        border-bottom: 1px solid lightgrey;
+        display: flex;
+        align-items: center;
+        padding: 0 35px;
+        font-size: 20px;
+        font-weight: 600;
+        }
+
+        .rule_box .rules_list{
+            padding: 15px 35px;
+
+        }
+
+        .rule_box .rules_list .rule{
+            margin: 5px 0px;
+            font-size: 17px;
+        }
+
+        .rule_box .rules_list .rule span{
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        .rule_box .buttons{
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 35px;
+            border-top: 1px solid lightgrey;
+        }
+
+        .rule_box .buttons button{
+            margin: 0 5px;
+            height: 40px;
+            width: 100px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .rule_box .buttons button.quit:hover{
+        background-color: darkgrey;
+        }
+
+        .rule_box .buttons button.continue:hover{
+            background-color: darkcyan;
+        }
+
+        /* Questions */
+
+        .quiz_box{
+            width: 550px;
+            background: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+
+        .quiz_box header{
+        /* position: relative; */ 
+        /* z-index: 99; */
+            height: 70px;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz_box header .title{
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        .quiz_box header .timer{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #61aeff;
+            height: 45px;
+            width: 145px;
+            padding: 0 8px;
+            border-radius: 5px;
+        }
+
+        .quiz_box header .timer .time_text{
+            font-size: 17px;
+        }
+
+        .quiz_box header .timer .time_sec{
+            font-size: 18px;
+            font-weight: 600;
+            background: #343a40;
+            height: 30px;
+            width: 40px;
+            text-align: center;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .quiz_box section{
+            padding: 20px 30px 20px 30px;
+        }
+
+        .quiz_box section .question_text{
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .quiz_box section .options_list{
+            padding: 20px 0;
+            display: block;
+        }
+
+        .quiz_box section .options_list .option{
+            background: aliceblue;
+            border: 1px solid #84c5fe;
+            border-radius: 5px;
+            padding: 8px 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .quiz_box section .options_list .option:hover{
+            color: #004085;
+            background: #cce5ff;
+        }
+
+        .quiz_box section .options_list .option:last-child{
+            margin-bottom: 0px;
+        }
+
+        .quiz_box section .options_list .option .icon{
+            height: 25px;
+            width: 25px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 13px;
+            line-height: 24px;
+        }
+
+        .quiz_box section .options_list .option .icon.tick{
+            color: #23903c;
+            border-color: #23903c;
+            background: #d4edda;
+        }
+
+        .quiz_box section .options_list .option .icon.cross{
+            color: #a42834;
+            border-color: #a42834;
+            background: #f8d7da;   
+        }
+
+        .quiz_box section .options_list .option.correctAns{
+            pointer-events: none;
+            color: #0c3816;
+            border-color: #c3e6cb;
+            background: #b1d8ba;
+        }
+
+        .quiz_box section .options_list .option.incorrectAns{
+            color: #721c24;
+            border-color: #f5c6cb;
+            background: #f8d7da;
+        }
+
+        .quiz_box section .options_list .option.disableClick{
+            pointer-events: none;
+        }
+
+        .quiz_box footer{
+            height: 60px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .quiz_box footer .total_questions span{
+            display: flex;
+        }
+
+        .quiz_box footer .total_questions span p {
+            font-weight: 600;
+            padding: 0 5px;
+        }
+
+        .quiz_box footer .next_question{
+            display: none;
+            height: 40px;
+            padding: 0 13px;
+            font-size: 18px;
+            font-weight: 400;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            background: #007bff;
+            cursor: pointer;
+        }
+
+        .quiz_box footer .next_question:hover{
+            background: #0263ca;
+        }
+
+        /* Results */
+
+        .result_box{
+            display: none;
+            background: #fff;
+            width: 550px;
+            padding: 25px 30px;
+            border-radius: 5px;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+
+        .result_box .icon{
+            font-size: 100px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .result_box .steady_score_text{
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .result_box .score_text span{
+            display: flex;
+            margin-top: 10px;
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        .result_box .score_text span p{
+            font-weight: 600;
+            padding: 0 5px;
+        }
+
+        .result_box .buttons{
+            display: flex;
+            margin: 20px 0;
+        }
+
+        .result_box .buttons button{
+            margin: 0 5px;
+            height: 40px;
+            width: 100px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;    
+        }
+
+        .result_box .buttons button.quit{
+            background-color: rgb(78, 78, 78);
+        }
+
+        .result_box .buttons button.replay:hover{
+            background-color: darkcyan;
+        }
+
+        .result_box .buttons button.quit:hover{
+            background-color: rgb(131, 131, 131);
+        }
+
+    </style>
+
+
+</head>
+<body>
+    <div class="rule_box">
+        <div class="rule_title">Here are the rules</div>
+        <div class="rules_list">
+            <div class="rule">1. You will have <span>15 seconds</span> per each question.</div>
+            <div class="rule">2. Once you select your answer, you can not change it.</div>
+            <div class="rule">3. You can not select any option once time goes off.</div>
+            <div class="rule">4. You can not exit the game while you're playing.</div>
+            <div class="rule">5. The number of points depends on how many questions you answer correctly.</div>
+        </div>
+    
+        <div class="buttons">
+            <a href="/logout"><button class="quit">Log Out</button></a>
+            <button class="continue">Continue</button>
+
+        </div>
+    </div>
+
+
+
+    <div class="quiz_box">
+        <header>
+            <div class="title">quizApp</div>
+            <div class="timer">
+                <div class="time_text">Time Left</div>
+                <div class="time_sec">15</div>
+            </div>
+        </header>
+
+        <section>
+            <div class="question_text">
+                <!-- <span>As of April 2022, which male tennis player has won the most Grand Slam titles?</span>  -->
+            </div>
+            <div class="options_list">
+                <!-- <div class="option">
+                    <span>Novak Djokovic</span> 
+                    <div class="icon cross"><i class="fas fa-times"></i></div>
+                </div>
+                <div class="option">
+                    <span>Rafael Nadal</span> 
+                    <div class="icon tick"><i class="fas fa-check"></i></div>
+                </div>
+                <div class="option">
+                    <span>Roger Federer</span> 
+                </div>
+                <div class="option">
+                    <span>Pete Sampras</span> 
+                </div> -->
+                
+            </div>
+        </section>
+
+        <footer>
+            <div class="total_questions">
+                <!-- <span>Question <p>1</p> of <p>5</p></span> -->
+            </div>
+            <button class="next_question">Next</button>
+        </footer>
+
+
+    </div>
+
+
+    <div class="result_box">
+        <div class="icon">
+            <i class="fas fa-crown"></i>
+        </div>
+        <div class="steady_score_text">You have completed the Quiz!</div>
+        <div class="score_text">
+            <span>You got <p>2</p> out of <p>5</p></span> 
+         </div>
+        <div class="buttons">
+            <a href="../domains/domains.html"><button class="replay">Replay</button></a>
+            <a href="/logout"><button class="quit">Log Out</button></a>
+        </div>
+    </div>
+
+
+    <script>
+        // Tech questions 
+        
+        let questions = [
+            {
+                number: 1,
+                question: "Who founded Apple Computer?",
+                answer: "Steve Jobs",
+                options: [
+                    "Elon Musk",
+                    "Bill Gates",
+                    "Steve Jobs",
+                    "Stephen Hawking"
+                ]
+            },
+            {
+                number: 2,
+                question: "What does the Internet prefix WWW stand for?",
+                answer: "World Wide Web",
+                options: [
+                    "Wide Width Wickets",
+                    "World Wide Web",
+                    "Worldwide Weather",
+                    "Western Washington World"
+                ]
+            },
+            {
+                number: 3,
+                question: "What does 'OS' computer abbreviation usually mean?",
+                answer: "Operating System",
+                options: [
+                    "Order of Significance",
+                    "Open Software",
+                    "Open Source",
+                    "Operating System"
+                ]
+            },
+            {
+                number: 4,
+                question: "Which of the following is not a JavaScript Framework?",
+                answer: "Django",
+                options: [
+                    "Vue",
+                    "Angular",
+                    "Django",
+                    "Node"
+                ]
+            },
+            {
+                number: 5,
+                question: "Which language is most used in competitive programming?",
+                answer: "C++",
+                options: [
+                    "C++",
+                    "Java",
+                    "JavaScript",
+                    "Python"
+                ]
+            },
+        ];
+
+
+
+            // Game control
+            
+        const start_btn = document.querySelector(".start_btn button");
+        const rule_box = document.querySelector(".rule_box");
+        const continue_btn = rule_box.querySelector(".buttons .continue");
+        const quiz_box = document.querySelector(".quiz_box");
+        const options_list = document.querySelector(".options_list");
+        const timeCount = quiz_box.querySelector(".timer .time_sec");
+        let time_text = quiz_box.querySelector(".timer .time_text");
+
+
+        let question_count = 0;      
+        let startTimeValue = 15;
+
+        continue_btn.onclick = ()=>{
+            rule_box.classList.remove("activeRule");
+            quiz_box.classList.add("activeQuiz");
+            showQuestions(question_count);
+            startClock(startTimeValue);
+        }
+
+
+        const next_btn = quiz_box.querySelector(".next_question");
+        const result_box = document.querySelector(".result_box");
+        const replay_quiz = result_box.querySelector(".buttons .replay");
+        const quit_quiz = result_box.querySelector(".buttons .quit");
+
+
+
+        function showQuestions(index){
+            const question_text = document.querySelector(".question_text");
+            const footer_qst_number = document.querySelector(".total_questions");
+
+            let question_tag = '<span>'+ questions[index].number + ". " + questions[index].question +'</span>';
+            let options_tag = '<div class="option"><span>'+ questions[index].options[0]+'</span></div>'
+                                + '<div class="option"><span>'+ questions[index].options[1]+'</span></div>'
+                                + '<div class="option"><span>'+ questions[index].options[2]+'</span></div>'
+                                + '<div class="option"><span>'+ questions[index].options[3]+'</span></div>';
+
+            let footer_qst_number_tag = '<div class="total_questions"><span>Question <p>'+ questions[index].number+ '</p> of <p>' + questions.length+ '</p></span></div>';
+            question_text.innerHTML = question_tag;
+            options_list.innerHTML = options_tag;
+            footer_qst_number.innerHTML = footer_qst_number_tag;
+
+            const option = options_list.querySelectorAll(".option");
+            for(let index = 0; index < option.length; index++){
+                option[index].setAttribute("onclick", "selectedOption(this)");
+            }
+        }
+
+
+        let checkIcon = '<div class="icon tick"><i class="fas fa-check"></i></div>';
+        let crossIcon = '<div class="icon cross"><i class="fas fa-times"></i></div>';
+        let numberOfGoodAnswers = 0;
+
+
+        function selectedOption(answer){
+            stopTimer();
+            let userAnswer = answer.textContent;
+            let correctAnswer = questions[question_count].answer;
+            
+            
+            if(userAnswer == correctAnswer){
+                answer.classList.add("correctAns");
+                answer.insertAdjacentHTML("beforeend", checkIcon);
+                numberOfGoodAnswers++;
+                console.log("bingo!");
+            }else{
+                answer.classList.add("incorrectAns");
+                answer.insertAdjacentHTML("beforeend", crossIcon);
+                console.log("ak ghalet sahbé");  
+
+                for (let j = 0; j < options_list.children.length; j++) {
+                    if(options_list.children[j].textContent == correctAnswer){
+                        options_list.children[j].setAttribute("class", "option correctAns");
+                    }
+                }
+            }
+
+            for (let i = 0; i < options_list.children.length; i++) {
+                options_list.children[i].classList.add("disableClick");
+            }
+
+            next_btn.style.display = "block";
+            
+        }
+
+        let counter;
+
+        function startClock(time){
+            time_text.innerHTML = "Time Left";
+
+            let correctAnswer = questions[question_count].answer;
+            counter = setInterval(timer, 1000);
+            function timer(){
+                timeCount.textContent = time;
+                if(time > 0){
+                    time = time - 1;
+                } else{
+                    time_text.innerHTML = "Time Off";
+                    for (let i = 0; i < options_list.children.length; i++) {
+                        options_list.children[i].classList.add("disableClick");
+                    }
+                    for (let j = 0; j < options_list.children.length; j++) {
+                        if(options_list.children[j].textContent == correctAnswer){
+                            options_list.children[j].setAttribute("class", "option correctAns");
+                        }
+                    }
+                    next_btn.style.display = "block";
+                }
+            }
+        }
+
+        function stopTimer(){
+            clearInterval(counter);
+        }
+
+
+        next_btn.onclick = ()=>{
+            
+            if(question_count < questions.length-1){
+                question_count++;
+                showQuestions(question_count);
+                clearInterval(counter);
+                startClock(startTimeValue);
+                next_btn.style.display = "none";
+            } else{
+                const score_text = result_box.querySelector(".score_text");
+                rule_box.classList.remove("activeRule");
+                quiz_box.classList.remove("activeQuiz");
+                result_box.classList.add("activeResult");
+                if (numberOfGoodAnswers < 3){
+                    let score_tag = '<div class="score_text"><span>You got <p>'+ numberOfGoodAnswers +'</p> out of <p>5</p>. Better luck next time! </span></div>';
+                    score_text.innerHTML = score_tag;
+                }else if(numberOfGoodAnswers < 5){
+                    let score_tag = '<div class="score_text"><span>Good job! You got <p>'+ numberOfGoodAnswers +'</p> out of <p>5</p></span></div>';
+                    score_text.innerHTML = score_tag;
+                }else{
+                    let score_tag = '<div class="score_text"><span>Perfect! You got <p>'+ numberOfGoodAnswers +'</p> out of <p>5</p></span></div>';
+                    score_text.innerHTML = score_tag;
+                }
+            
+                console.log("There are no more questions!");
+            }
+            
+        }
+    </script>
+
+</body>
+</html>
